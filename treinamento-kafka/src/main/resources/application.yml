@@ -1,0 +1,19 @@
+spring:
+  cloud:
+    stream:
+      kafka:
+        bindings:
+          listenFirst-in-0:
+            consumer:
+              startOffset: latest
+      bindings:
+        listenFirst-in-0:
+          destination: first
+          group: app5
+        sendFirst-out-0:
+          destination: first
+          producer:
+            partition-key-expression: headers['partitionKey']
+            partition-count: 3
+    function:
+      definition: listenFirst;sendFirst
