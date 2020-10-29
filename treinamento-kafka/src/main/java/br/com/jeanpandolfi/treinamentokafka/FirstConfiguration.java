@@ -1,4 +1,4 @@
-package br.com.jeanpandolfi.treinamentokafka.config;
+package br.com.jeanpandolfi.treinamentokafka;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,21 +6,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
+import reactor.core.publisher.EmitterProcessor;
+import reactor.core.publisher.Flux;
 
-import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-
 @Configuration
 public class FirstConfiguration {
-
-    private static final String[] chaves = new String[]{"1", "2", "3", "4"};
-    private static final Random RANDOM = new Random(System.currentTimeMillis());
     private static final Logger logger =
             LoggerFactory.getLogger(FirstConfiguration.class);
-
     @Bean
     public Consumer<Message<String>> listenFirst() {
         return mensagem -> logger.info(
@@ -28,15 +23,14 @@ public class FirstConfiguration {
                         mensagem.getPayload(),
                         mensagem.getHeaders().get(KafkaHeaders.RECEIVED_PARTITION_ID)));
     }
+
     @Bean
-    public Supplier<Message<String>> sendFirst() {
-        return () -> {
-            String chave = chaves[RANDOM.nextInt(chaves.length)];
-            logger.info(String.format("Enviando %s", chave));
-            return MessageBuilder
-                    .withPayload(String.format("Message from Spring [%s]", chave))
-                    .setHeader("partitionKey", chave)
-                    .build();
-        };
+    public EmitterProcessor<Message<String>> firstProcessor() {
+        return EmitterProcessor.create();
+    }
+
+    @Bean
+    public Supplier<Flux<Message<String>>> sendFirst() {
+        return this::firstProcessor;
     }
 }
