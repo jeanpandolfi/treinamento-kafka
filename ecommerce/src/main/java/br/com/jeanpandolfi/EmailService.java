@@ -6,11 +6,14 @@ public class EmailService {
 
     public static void main(String[] args) {
         var emailService = new EmailService();
-        var kafkaService = new KafkaService(
+        /**O try seria para tentar receber e se caso ocorra alguma exeption ele fecha o porta de conexão*/
+        try(var kafkaService = new KafkaService(
                 EmailService.class.getSimpleName(),
                 "ECOMMERCE_SEND_EMAIL",
-                emailService::parse);
-        kafkaService.run();
+                emailService::parse)){
+            kafkaService.run();
+        }
+
     }
 
     private void parse(ConsumerRecord<String, String> record){

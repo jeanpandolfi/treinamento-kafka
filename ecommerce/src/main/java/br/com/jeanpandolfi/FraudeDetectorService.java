@@ -6,10 +6,13 @@ public class FraudeDetectorService {
 
     public static void main(String[] args) {
         var fraudService = new FraudeDetectorService();
-        var kafkaService = new KafkaService(
+        /**O try seria para tentar receber e se caso ocorra alguma exeption ele fecha o porta de conexão*/
+        try(var kafkaService = new KafkaService(
                 FraudeDetectorService.class.getSimpleName(),
-                "ECOMMERCE_NEW_ORDER", fraudService::parse);
-        kafkaService.run();
+                "ECOMMERCE_NEW_ORDER", fraudService::parse)){
+            kafkaService.run();
+        }
+
     }
 
     private void parse(ConsumerRecord<String, String> record) {

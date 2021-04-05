@@ -5,12 +5,14 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.UUID;
 
-public class KafkaService {
+public class KafkaService implements Closeable {
     private final KafkaConsumer<String, String> consumer;
     private ConsumerFunction parse;
 
@@ -50,5 +52,10 @@ public class KafkaService {
          * tenha que processar novamente as mensagens já processadas pois não foi commitada.*/
         properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1");
         return properties;
+    }
+
+    @Override
+    public void close(){
+        consumer.close();
     }
 }
