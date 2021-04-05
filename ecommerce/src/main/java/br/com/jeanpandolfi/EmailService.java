@@ -6,7 +6,10 @@ public class EmailService {
 
     public static void main(String[] args) {
         var emailService = new EmailService();
-        var kafkaService = new KafkaService("ECOMMERCE_SEND_EMAIL", emailService::parse);
+        var kafkaService = new KafkaService(
+                EmailService.class.getSimpleName(),
+                "ECOMMERCE_SEND_EMAIL",
+                emailService::parse);
         kafkaService.run();
     }
 
