@@ -2,6 +2,9 @@ package br.com.jeanpandolfi;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class FraudeDetectorService {
 
     public static void main(String[] args) {
@@ -10,7 +13,8 @@ public class FraudeDetectorService {
         try(var kafkaService = new KafkaService<Order>(
                 FraudeDetectorService.class.getSimpleName(),
                 "ECOMMERCE_NEW_ORDER", fraudService::parse,
-                Order.class)){
+                Order.class,
+                new HashMap<>())){
             kafkaService.run();
         }
 

@@ -12,6 +12,9 @@ public class GsonDeserializer<T> implements Deserializer<T> {
     private final Gson gson = new GsonBuilder().create();
     private Class<T> type;
 
+    /** Métodp para pegar propriedades especificas de cada Deserializar a ser criado
+     * Nesse caso é pega a property que diz isso no {@link KafkaService} e passada como parametro
+     * no método deserialize para fazer o parse.*/
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
         String typeName = String.valueOf(configs.get(TYPE_CONFIG));

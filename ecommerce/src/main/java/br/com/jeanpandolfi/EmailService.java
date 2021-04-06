@@ -2,6 +2,9 @@ package br.com.jeanpandolfi;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class EmailService {
 
     public static void main(String[] args) {
@@ -11,7 +14,8 @@ public class EmailService {
                 EmailService.class.getSimpleName(),
                 "ECOMMERCE_SEND_EMAIL",
                 emailService::parse,
-                String.class)){
+                String.class,
+                Map.of())){
             kafkaService.run();
         }
 
