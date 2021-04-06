@@ -11,7 +11,8 @@ public class LogService {
         try(var kafkaService = new KafkaService(
                 LogService.class.getSimpleName(),
                 Pattern.compile("ECOMMERCE.*"),
-                logService::parse)){
+                logService::parse,
+                String.class)){
             kafkaService.run();
         }
     }
