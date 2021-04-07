@@ -6,3 +6,4 @@ $ kafka-consumer-groups --all-groups --bootstrap-server localhost:9092 --describ
 
 -> Para Paralelizar um consumo de mensagens dentro de um grupo de serviços, deve ter mais de uma particao para aquele topico.
 -> Para o kafka distribuir mas mensagens ele usa um hash en cima da key da mensagem para balencear.
+-> Quando um Consumer estiver escutando mais de um tópico por exemplo atravś de um pattern ("ECOMMERCE.*") se caso for criado um novo tópico que satisfaça o pattern o consumer não começar a escutar esse novo tópico imediatamente. Será necessário reiniciar seu Consumer para que ele começe a escutar o tópico criado.
