@@ -11,15 +11,14 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 public class KafkaService<T> implements Closeable {
     private final KafkaConsumer<String, T> consumer;
     private ConsumerFunction parse;
 
-    public KafkaService(String groupId, String topic, ConsumerFunction parse, Class<T> typeClass, Map<String, String> properties) {
-        this(groupId, parse, typeClass, properties);
+    public KafkaService(String consumerGroupId, String topic, ConsumerFunction parse, Class<T> typeClass, Map<String, String> properties) {
+        this(consumerGroupId, parse, typeClass, properties);
         /**Passa uma lista de topicos que esse consumidor irá escutar. Por boas práticas um consumidor só escuta um tópico*/
         consumer.subscribe(Collections.singletonList(topic));
     }
@@ -43,10 +42,9 @@ public class KafkaService<T> implements Closeable {
                 for (ConsumerRecord<String, T> record : records) {
                     try {
                         this.parse.consume(record);
-                    } catch (ExecutionException e) {
-                        // so far, just logging the exeception for this message
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
+                    } catch (Exception e) {
+                        // only catches Exception because no matter which Exeception
+                        // i want to recorder and parse the next one
                         // so far, just logging the exeception for this message
                         e.printStackTrace();
                     }
